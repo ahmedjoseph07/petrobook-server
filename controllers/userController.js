@@ -109,3 +109,28 @@ export const getUserAndProfile = async(req,res)=>{
         return res.status(500).json({message:err.message});
     }
 }
+
+export const updateProfileData = async(req,res)=>{
+    try {
+        const {token,...newProfileData} = req.body;
+        const userProfile = await User.findOne({token});
+        if(!userProfile){
+            return res.status(404).json({message:"User not found"});
+        }
+        const profileToUpdate = await Profile.findOne({userId:userProfile._id});
+        Object.assign(profileToUpdate,newProfileData);
+        await profileToUpdate.save();
+        res.json({message:"Profile updated"});
+    } catch (err) {
+        return res.status(500).json({message:"err.message"});
+    }
+}
+
+export const getAllUserProfile= async(req,res)=>{
+    try {
+        const profiles = await Profile.find().populate('userId', 'name username email profilePicture'); 
+        return res.json({profiles});
+    } catch (err) {
+        return res.status(500).json({message:err.message});
+    }
+}
