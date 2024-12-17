@@ -11,8 +11,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
-app.use(postsRoutes);
-app.use(userRoutes);
+app.use("/api/v1",postsRoutes);
+app.use("/api/v1",userRoutes); 
 
 
 const start = async() => {
